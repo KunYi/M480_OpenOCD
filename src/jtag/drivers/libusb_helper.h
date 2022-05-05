@@ -48,6 +48,10 @@ void jtag_libusb_close(struct libusb_device_handle *dev);
 int jtag_libusb_control_transfer(struct libusb_device_handle *dev,
 		uint8_t request_type, uint8_t request, uint16_t value,
 		uint16_t index, char *bytes, uint16_t size, unsigned int timeout);
+int jtag_libusb_interrupt_write(struct libusb_device_handle *dev, int ep, char *bytes,
+	int size, int timeout, int *transferred);
+int jtag_libusb_interrupt_read(struct libusb_device_handle *dev, int ep, char *bytes,
+	int size, int timeout, int *transferred);
 int jtag_libusb_bulk_write(struct libusb_device_handle *dev, int ep,
 		char *bytes, int size, int timeout, int *transferred);
 int jtag_libusb_bulk_read(struct libusb_device_handle *dev, int ep,

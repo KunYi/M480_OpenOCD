@@ -264,6 +264,36 @@ COMMAND_HANDLER(hl_interface_handle_layout_command)
 	return ERROR_FAIL;
 }
 
+COMMAND_HANDLER(hl_interface_handle_close_command)
+{
+	LOG_DEBUG("hl_interface_handle_close_command");
+
+	if (CMD_ARGC != 0) {
+		LOG_ERROR("Do not need any argument");
+		return ERROR_COMMAND_SYNTAX_ERROR;
+	}
+
+	if (hl_if.layout->api->close)
+		hl_if.layout->api->close(hl_if.handle);
+
+	return ERROR_OK;
+}
+
+COMMAND_HANDLER(hl_interface_handle_reset_command)
+{
+	LOG_DEBUG("hl_interface_handle_reset_command");
+
+	if (CMD_ARGC != 0) {
+		LOG_ERROR("Do not need any argument");
+		return ERROR_COMMAND_SYNTAX_ERROR;
+	}
+
+	if (hl_if.layout->api->assert_srst)
+		hl_if.layout->api->assert_srst(hl_if.handle, 0);
+	
+	return ERROR_OK;
+}
+
 COMMAND_HANDLER(hl_interface_handle_vid_pid_command)
 {
 	if (CMD_ARGC > HLA_MAX_USB_IDS * 2) {
@@ -346,6 +376,20 @@ static const struct command_registration hl_interface_command_handlers[] = {
 	 .help = "set the layout of the adapter",
 	 .usage = "layout_name",
 	 },
+	{
+	 .name = "hla_close",
+	 .handler = &hl_interface_handle_close_command,
+	 .mode = COMMAND_EXEC,
+	 .help = "close hl interface",
+	 .usage = "close",
+	},
+	{
+	 .name = "hla_reset",
+	 .handler = &hl_interface_handle_reset_command,
+	 .mode = COMMAND_EXEC,
+	 .help = "reset hl interface",
+	 .usage = "reset [command]",
+	},
 	{
 	 .name = "hla_vid_pid",
 	 .handler = &hl_interface_handle_vid_pid_command,

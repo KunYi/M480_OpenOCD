@@ -240,6 +240,35 @@ int jtag_libusb_control_transfer(struct libusb_device_handle *dev, uint8_t reque
 	return transferred;
 }
 
+int jtag_libusb_interrupt_write(struct libusb_device_handle *dev, int ep, char *bytes,
+	int size, int timeout, int *transferred)
+{
+	transferred = 0;
+
+	int ret = libusb_interrupt_transfer(dev, ep, (unsigned char *)bytes, size,
+				transferred, timeout);
+
+	if (ret != LIBUSB_SUCCESS) {
+		LOG_ERROR("libusb_interrupt_write error: %s", libusb_error_name(ret));
+		return jtag_libusb_error(ret);
+	}
+	return ERROR_OK;
+}
+
+int jtag_libusb_interrupt_read(struct libusb_device_handle *dev, int ep, char *bytes,
+	int size, int timeout, int *transferred)
+{
+	transferred = 0;
+
+	int ret = libusb_interrupt_transfer(dev, ep, (unsigned char *)bytes, size,
+				transferred, timeout);
+	if (ret != LIBUSB_SUCCESS) {
+		if (ret != LIBUSB_ERROR_TIMEOUT) LOG_ERROR("libusb_interrupt_read error: %s", libusb_error_name(ret));
+		return jtag_libusb_error(ret);
+	}
+	return ERROR_OK;
+}
+
 int jtag_libusb_bulk_write(struct libusb_device_handle *dev, int ep, char *bytes,
 			   int size, int timeout, int *transferred)
 {

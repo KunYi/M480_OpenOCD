@@ -227,19 +227,23 @@ static int nulink1_usb_xfer_rw(void *handle, int cmdsize, uint8_t *buf)
 #endif
 	jtag_libusb_interrupt_write(h->fd, h->tx_ep, (char *)h->cmdbuf, h->max_packet_size,
 		NULINK_WRITE_TIMEOUT, &transferred);
+	#if 0
 	if (debug_level >= LOG_LVL_DEBUG)
 	{
 		char bufName[20] = "cmd transferred";
 		print64BytesBufferContent(bufName, h->cmdbuf, h->max_packet_size);
 	}
+	#endif
 	do {
 		jtag_libusb_interrupt_read(h->fd, h->rx_ep, (char *)buf,
 			h->max_packet_size, NULINK_READ_TIMEOUT, &transferred);
+		#if 0
 		if (debug_level >= LOG_LVL_DEBUG)
 		{
 			char bufName1[20] = "data received";
 			print64BytesBufferContent(bufName1, buf, h->max_packet_size);
 		}
+		#endif
 		if(GetTickCount() - startTime > USBCMD_TIMEOUT)
 		{
 			res = ERROR_FAIL;
@@ -267,19 +271,23 @@ static int nulink2_usb_xfer_rw(void *handle, int cmdsize, uint8_t *buf)
 #endif
 	jtag_libusb_interrupt_write(h->fd, h->tx_ep, (char *)h->cmdbuf, h->max_packet_size,
 		NULINK_WRITE_TIMEOUT, &transferred);
+	#if 0
 	if (debug_level >= LOG_LVL_DEBUG)
 	{
 		char bufName[20] = "cmd transferred";
 		print64BytesBufferContent(bufName, h->cmdbuf, h->max_packet_size);
 	}
+	#endif
 	do {
 		jtag_libusb_interrupt_read(h->fd, h->rx_ep, (char *)buf,
 			h->max_packet_size, NULINK_READ_TIMEOUT, &transferred);
+		#if 0
 		if (debug_level >= LOG_LVL_DEBUG)
 		{
 			char bufName1[20] = "data received";
 			print64BytesBufferContent(bufName1, buf, h->max_packet_size);
 		}
+		#endif
 		if(GetTickCount() - startTime > USBCMD_TIMEOUT)
 		{
 			res = ERROR_FAIL;
